@@ -6,6 +6,16 @@ resource "aws_cloudfront_distribution" "cdn" {
   origin {
     domain_name = var.cdn_s3_domain_name
     origin_id = var.cdn_s3_origin_id
+    custom_origin_config {
+      http_port                = var.cdn_http_port
+      https_port               = var.cdn_https_port
+      origin_keepalive_timeout = var.cdn_origin_keepalive_timeout
+      origin_protocol_policy   = var.cdn_origin_protocol_policy
+      origin_read_timeout      = var.cdn_origin_read_timeout
+      origin_ssl_protocols = [
+        "TLSv1.2",
+      ]
+    }
   }
 
   origin {
@@ -19,10 +29,12 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   default_cache_behavior {
+    target_origin_id = var.default_cache_behavior_target_origin_id
     allowed_methods = ["GET", "HEAD"]
     cached_methods = ["GET", "HEAD"]
     viewer_protocol_policy = var.default_cache_behavior_viewer_protocl_policy
-    target_origin_id = var.default_cache_behavior_target_origin_id
+    
+
     forwarded_values {
       query_string = var.default_cache_behavior_forwarded_values_query_string
       cookies {
@@ -30,6 +42,9 @@ resource "aws_cloudfront_distribution" "cdn" {
       }
     }
   }
+
+
+
 
   ordered_cache_behavior {
     path_pattern           = var.ordered_cache_behavior_path_pattern

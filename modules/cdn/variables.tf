@@ -21,6 +21,31 @@ variable "cdn_s3_origin_id" {
     default = ""
 }
 
+variable "cdn_http_port" {
+    type = number
+    default = 80
+}
+
+variable "cdn_https_port" {
+    type = number
+    default = 443
+}
+
+variable "cdn_origin_keepalive_timeout" {
+    type = number
+    default = 5
+}
+
+variable "cdn_origin_protocol_policy" {
+    type = string
+    default = "http-only"
+}
+
+variable "cdn_origin_read_timeout" {
+    type = number
+    default = 30
+}
+
 variable "cdn_api_domain_name"{
     type = string
     default = ""

@@ -27,16 +27,24 @@ module "website_cloudfront" {
     source = "./modules/cdn"
 
     enable_cdn                                                  = local.enable_cdn
+    
     cdn_default_root_object                                     = local.cdn_default_root_object
-    cdn_s3_domain_name                                          = module.website_bucket.bucket_regional_domain_name
-    cdn_s3_origin_id                                            = local.bucket
+    cdn_s3_domain_name                                          = "${module.website_bucket.s3_website_endpoint}"
+    cdn_s3_origin_id                                            = module.website_bucket.s3_website_endpoint_id
+    cdn_http_port                                               = local.cdn_http_port
+    cdn_https_port                                              = local.cdn_https_port
+    cdn_origin_keepalive_timeout                                = local.cdn_origin_keepalive_timeout
+    cdn_origin_protocol_policy                                  = local.cdn_origin_protocol_policy
+    cdn_origin_read_timeout                                     = local.cdn_origin_read_timeout
+
     cdn_api_domain_name                                         = "${module.website_api.api_id}.execute-api..amazonaws.com"
     cdn_api_origin_id                                           = local.cdn_api_origin_id
     cdn_api_origin_path                                         = local.cdn_api_origin_path
+    
     cloudfront_default_certificate                              = local.cloudfront_default_certificate
 
     default_cache_behavior_viewer_protocl_policy                = local.default_cache_behavior_viewer_protocl_policy
-    default_cache_behavior_target_origin_id                     = local.bucket
+    default_cache_behavior_target_origin_id                     = module.website_bucket.s3_website_endpoint_id
     default_cache_behavior_forwarded_values_query_string        = local.default_cache_behavior_forwarded_values_query_string
     default_cache_behavior_forrwarded_values_cookies_forward    = local.default_cache_behavior_forrwarded_values_cookies_forward
     
